@@ -1,7 +1,7 @@
 {
   "name": "matheussampaio0/larascord",
   "description": "Larascord++",
-  "license": "",
+  "license": "MIT",
   "autoload": {
       "psr-4": {
           "Jakyeru\\Larascord\\": "src/"
