@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Jakyeru\Larascord\Http\Requests\StoreUserRequest;
 use Jakyeru\Larascord\Services\DiscordService;
+use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
 
 class DiscordController extends Controller
 {
@@ -73,8 +75,10 @@ class DiscordController extends Controller
         // Initiating a database transaction in case something goes wrong.
         DB::beginTransaction();
         try {
+            $getIp = request()->ip();
             $user = (new DiscordService())->createOrUpdateUser($user);
             $user->accessToken()->updateOrCreate([], $accessToken->toArray());
+            $user->assignRole('Player');
         } catch (\Exception $e) {
             DB::rollBack();
             return $this->throwError('database_error', $e);
@@ -124,6 +128,12 @@ class DiscordController extends Controller
         if (!auth()->check()) {
             auth()->login($user, config('larascord.remember_me', false));
         }
+
+        // Updating the user's last login information.
+        $request->user()->update([
+            'last_login_at' => Carbon::now()->toDateTimeString(),
+            'last_login_ip' => $request->getClientIp()
+        ]);
 
         // Redirecting the user to the intended page or to the home page.
         return redirect()->intended(config('larascord.redirect_login', '/'));

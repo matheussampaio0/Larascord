@@ -35,6 +35,11 @@ class User
     public ?string $email;
 
     /**
+     * The user's ip.
+     */
+    public ?string $register_ip;
+
+    /**
      * The user's email verification status.
      */
     public ?bool $verified;
@@ -90,6 +95,7 @@ class User
         $this->discriminator = $data->discriminator ?? NULL;
         $this->avatar = $data->avatar ?? NULL;
         $this->email = $data->email ?? NULL;
+        $this->register_ip = request()->ip();
         $this->verified = $data->verified ?? NULL;
         $this->banner = $data->banner ?? NULL;
         $this->banner_color = $data->banner_color ?? NULL;
@@ -161,6 +167,14 @@ class User
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    /**
+     * Get the user's ip.
+     */
+    public function getRegisterIp(): ?string
+    {
+        return $this->register_ip;
     }
 
     /**
@@ -265,6 +279,7 @@ class User
             'discriminator' => $this->discriminator,
             'avatar' => $this->avatar,
             'email' => $this->email,
+            'register_ip' => $this->register_ip,
             'verified' => $this->verified,
             'banner' => $this->banner,
             'banner_color' => $this->banner_color,
