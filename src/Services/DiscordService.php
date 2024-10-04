@@ -178,6 +178,20 @@ class DiscordService
     }
 
     /**
+     * Create a new user in the database.
+     *
+     * @throws Exception
+     */
+    public function createUser(\Jakyeru\Larascord\Types\User $user): User
+    {
+        if (!$user->getAccessToken()) {
+            throw new Exception('User access token is missing.');
+        }
+
+        return User::create($user->toArray());
+    }
+
+    /**
      * Create or update a user in the database.
      *
      * @throws Exception
