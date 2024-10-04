@@ -245,4 +245,13 @@ class DiscordService
 
         return json_decode($response->body());
     }
+
+    /**
+     * Finds a user by their Discord ID.
+     */
+    public function findUserByDiscordId(string $discordId)
+    {
+        // Assuming the Discord ID is the same as the user ID in your application
+        return User::find($discordId);
+    }
 }
